@@ -6,8 +6,9 @@ import time
 
 
 class Gen_videos():
-    def __init__(self, image_set):
+    def __init__(self, image_set, BEGIN_IMG_ID):
         self.image_set = image_set
+        self.begin_img_id = BEGIN_IMG_ID
         self.localtime = time.localtime(time.time())
         self.date_info = str(self.localtime.tm_year) + str(self.localtime.tm_mon) + str(self.localtime.tm_mday) + str(self.localtime.tm_hour)
         self.dict_file = os.path.join('npy_set', "result_dict.npy")
@@ -44,13 +45,14 @@ class Gen_videos():
                                 self.fps, (self.width, self.height))
         pre_name = self.get_pre_name()
         for i in range(self.total_frame):
-            print(i)
+            id = self.begin_img_id + i
+            print(id)
             # img_copy = self.img.copy()
-            img_copy = cv2.imread(os.path.join(self.image_set, str(pre_name) + str(i+1) + '.bmp'))
+            img_copy = cv2.imread(os.path.join(self.image_set, str(pre_name) + str(id+1) + '.bmp'))
             img_copy = cv2.resize(img_copy,(self.height, self.width))
 
-            if str(i) in self.temp_5_nums.keys():
-                for locusts_info in self.temp_5_nums[str(i)]:
+            if str(id) in self.temp_5_nums.keys():
+                for locusts_info in self.temp_5_nums[str(id)]:
                     code, x, y, = locusts_info
                     cv2.circle(img_copy, (x//self.r_width,y//self.r_herght), 2, self.color_dict[str(code)], 4)
                     cv2.putText(img_copy, str(code), (x//self.r_width,y//self.r_herght), 2, 0.5, self.color_dict[str(code)], 1)
